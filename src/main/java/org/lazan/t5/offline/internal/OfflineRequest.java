@@ -1,5 +1,6 @@
 package org.lazan.t5.offline.internal;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -10,7 +11,7 @@ public class OfflineRequest implements Request {
 	private final Session session;
 	private final String contextPath;
 	private final boolean xhr;
-	
+
 	public OfflineRequest(Session session, String contextPath, boolean xhr) {
 		super();
 		this.session = session;
@@ -30,17 +31,17 @@ public class OfflineRequest implements Request {
 
 	@Override
 	public List<String> getParameterNames() {
-		throw new UnsupportedOperationException("getParameterNames");
+		return Collections.<String> emptyList();
 	}
 
 	@Override
 	public String getParameter(String name) {
-		throw new UnsupportedOperationException("getParameter");
+		return null;
 	}
 
 	@Override
 	public String[] getParameters(String name) {
-		throw new UnsupportedOperationException("getParameters");
+		return null;
 	}
 
 	@Override
@@ -75,7 +76,7 @@ public class OfflineRequest implements Request {
 
 	@Override
 	public boolean isSecure() {
-		throw new UnsupportedOperationException("isSecure");
+		return false; // TODO
 	}
 
 	@Override

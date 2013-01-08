@@ -62,7 +62,7 @@ public class OfflineResponse implements Response {
 
 	@Override
 	public String encodeURL(String URL) {
-		throw new UnsupportedOperationException("encodeURL");
+		return URL; // TODO
 	}
 
 	@Override
