@@ -11,12 +11,14 @@ public class OfflineRequest implements Request {
 	private final Session session;
 	private final String contextPath;
 	private final boolean xhr;
+	private final boolean secure;
 
-	public OfflineRequest(Session session, String contextPath, boolean xhr) {
+	public OfflineRequest(Session session, String contextPath, boolean xhr, boolean secure) {
 		super();
 		this.session = session;
 		this.contextPath = contextPath;
 		this.xhr = xhr;
+		this.secure = secure;
 	}
 
 	@Override
@@ -76,7 +78,7 @@ public class OfflineRequest implements Request {
 
 	@Override
 	public boolean isSecure() {
-		return false; // TODO
+		return secure;
 	}
 
 	@Override

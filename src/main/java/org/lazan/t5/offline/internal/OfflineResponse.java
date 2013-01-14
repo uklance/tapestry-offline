@@ -8,20 +8,32 @@ import org.apache.tapestry5.Link;
 import org.apache.tapestry5.services.Response;
 
 public class OfflineResponse implements Response {
-	private final PrintWriter printWriter;
+	private PrintWriter printWriter;
+	private OutputStream out;
 	
 	public OfflineResponse(PrintWriter printWriter) {
 		this.printWriter = printWriter;
 	}
 	
+	public OfflineResponse(OutputStream out) {
+		super();
+		this.out = out;
+	}
+
 	@Override
 	public PrintWriter getPrintWriter(String contentType) throws IOException {
+		if (printWriter == null) {
+			throw new IllegalStateException("PrintWriter not set");
+		}
 		return printWriter;
 	}
 
 	@Override
 	public OutputStream getOutputStream(String contentType) throws IOException {
-		throw new UnsupportedOperationException("getOutputStream");
+		if (out == null) {
+			throw new IllegalStateException("OutputStream not set");
+		}
+		return out;
 	}
 
 	@Override
