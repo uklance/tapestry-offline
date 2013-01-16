@@ -1,123 +1,120 @@
 package org.lazan.t5.offline.internal;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.Session;
+import org.lazan.t5.offline.OfflineRequestContext;
+import org.lazan.t5.offline.services.OfflineRequestGlobals;
 
 public class OfflineRequest implements Request {
-	private final Session session;
-	private final String contextPath;
-	private final boolean xhr;
-	private final boolean secure;
-
-	public OfflineRequest(Session session, String contextPath, boolean xhr, boolean secure) {
+	private final OfflineRequestGlobals globals;
+	private final OfflineRequestContext context;
+	
+	public OfflineRequest(OfflineRequestGlobals globals, OfflineRequestContext context) {
 		super();
-		this.session = session;
-		this.contextPath = contextPath;
-		this.xhr = xhr;
-		this.secure = secure;
+		this.globals = globals;
+		this.context = context;
 	}
 
 	@Override
 	public Session getSession(boolean create) {
-		return session;
+		return context.getSession(create);
 	}
 
 	@Override
 	public String getContextPath() {
-		return contextPath;
+		return globals.getContextPath();
 	}
 
 	@Override
 	public List<String> getParameterNames() {
-		return Collections.<String> emptyList();
+		return context.getParameterNames();
 	}
 
 	@Override
 	public String getParameter(String name) {
-		return null;
+		return context.getParameter(name);
 	}
 
 	@Override
 	public String[] getParameters(String name) {
-		return null;
+		return context.getParameters(name);
 	}
 
 	@Override
 	public String getPath() {
-		throw new UnsupportedOperationException("getPath");
+		return context.getPath();
 	}
 
 	@Override
 	public Locale getLocale() {
-		throw new UnsupportedOperationException("getLocale");
+		return context.getLocale();
 	}
 
 	@Override
 	public List<String> getHeaderNames() {
-		throw new UnsupportedOperationException("getHeaderNames");
+		return context.getHeaderNames();
 	}
 
 	@Override
 	public long getDateHeader(String name) {
-		throw new UnsupportedOperationException("getDateHeader");
+		return context.getDateHeader(name);
 	}
 
 	@Override
 	public String getHeader(String name) {
-		throw new UnsupportedOperationException("getHeader");
+		return context.getHeader(name);
 	}
 
 	@Override
 	public boolean isXHR() {
-		return xhr;
+		return context.isXHR();
 	}
 
 	@Override
 	public boolean isSecure() {
-		return secure;
+		return context.isSecure();
 	}
 
 	@Override
 	public String getServerName() {
-		throw new UnsupportedOperationException("getServerName");
+		return globals.getServerName();
 	}
 
 	@Override
 	public boolean isRequestedSessionIdValid() {
-		throw new UnsupportedOperationException("isRequestedSessionIdValid");
+		return context.isRequestedSessionIdValid();
 	}
 
 	@Override
 	public Object getAttribute(String name) {
-		throw new UnsupportedOperationException("getAttribute");
+		return context.getAttribute(name);
 	}
 
 	@Override
 	public void setAttribute(String name, Object value) {
-		throw new UnsupportedOperationException("setAttribute");
+		context.setAttribute(name, value);
 	}
 
 	@Override
 	public String getMethod() {
-		throw new UnsupportedOperationException("getMethod");
+		return context.getMethod();
 	}
 
 	@Override
 	public int getLocalPort() {
-		throw new UnsupportedOperationException("getLocalPort");
+		return globals.getLocalPort();
 	}
 
 	@Override
 	public int getServerPort() {
-		throw new UnsupportedOperationException("getServerPort");
+		return globals.getServerPort();
 	}
 
 	@Override
 	public String getRemoteHost() {
-		throw new UnsupportedOperationException("getRemoteHost");
+		return globals.getRemoteHost();
 	}
 }

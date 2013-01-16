@@ -8,17 +8,15 @@ import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.services.Session;
 
 public class OfflineSession implements Session {
-	private Map<String, Object> attributes;
+	private final Map<String, Object> attributes;
 	private boolean invalidated = false;
 	
-	public OfflineSession() {
+	public OfflineSession(Map<String, Object> attributes) {
+		this.attributes = CollectionFactory.newMap(attributes);
 	}
 
 	@Override
 	public List<String> getAttributeNames() {
-		if (attributes == null) {
-			return Collections.emptyList();
-		}
 		List<String> names = CollectionFactory.newList(attributes.keySet());
 		Collections.sort(names);
 		return names;
@@ -26,9 +24,6 @@ public class OfflineSession implements Session {
 
 	@Override
 	public List<String> getAttributeNames(String prefix) {
-		if (attributes == null) {
-			return Collections.emptyList();
-		}
 		List<String> names = CollectionFactory.newList();
 		for (String name : attributes.keySet()) {
 			if (name.startsWith(prefix)) {
@@ -41,14 +36,11 @@ public class OfflineSession implements Session {
 
 	@Override
 	public Object getAttribute(String name) {
-		return attributes == null ? null : attributes.get(name);
+		return attributes.get(name);
 	}
 
 	@Override
 	public void setAttribute(String name, Object value) {
-		if (attributes == null) {
-			attributes = CollectionFactory.newMap();
-		}
 		attributes.put(name,  value);
 	}
 
@@ -64,7 +56,7 @@ public class OfflineSession implements Session {
 
 	@Override
 	public void invalidate() {
-		attributes = null;
+		attributes.clear();
 		invalidated = true;
 	}
 

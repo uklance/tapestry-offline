@@ -5,8 +5,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.Locale;
-import java.util.Map;
 import java.util.concurrent.Future;
 
 import org.apache.tapestry5.ioc.Invokable;
@@ -20,20 +18,19 @@ import org.apache.tapestry5.services.ComponentRequestHandler;
 import org.apache.tapestry5.services.PageRenderRequestParameters;
 import org.apache.tapestry5.services.RequestGlobals;
 import org.apache.tapestry5.services.Response;
+import org.lazan.t5.offline.OfflineRequestContext;
 import org.lazan.t5.offline.internal.OfflineRequest;
 import org.lazan.t5.offline.internal.OfflineResponse;
-import org.lazan.t5.offline.internal.OfflineSession;
 import org.lazan.t5.offline.internal.Pointer;
-import org.lazan.t5.offline.services.OfflineComponentRenderParameters;
 import org.lazan.t5.offline.services.OfflineComponentRenderer;
-import org.lazan.t5.offline.services.OfflinePageRenderParameters;
+import org.lazan.t5.offline.services.OfflineRequestGlobals;
 
 public class OfflineComponentRendererImpl implements OfflineComponentRenderer {
 	private final ParallelExecutor parallelExecutor;
 	private final ComponentRequestHandler componentRequestHandler;
 	private final RequestGlobals requestGlobals;
-	private final String contextPath;
 	private final ThreadLocale threadLocale;
+	private final OfflineRequestGlobals offlineRequestGlobals;
 
 	public OfflineComponentRendererImpl(
 			ParallelExecutor parallelExecutor,
@@ -41,45 +38,44 @@ public class OfflineComponentRendererImpl implements OfflineComponentRenderer {
 			RequestGlobals requestGlobals,
 			ApplicationGlobals applicationGlobals,
 			TypeCoercer typeCoercer,
-			ThreadLocale threadLocale) {
+			ThreadLocale threadLocale,
+			OfflineRequestGlobals offlineRequestGlobals) {
 		super();
 		this.parallelExecutor = parallelExecutor;
 		this.componentRequestHandler = componentRequestHandler;
 		this.requestGlobals = requestGlobals;
-		this.contextPath = applicationGlobals.getServletContext().getContextPath();
 		this.threadLocale = threadLocale;
+		this.offlineRequestGlobals = offlineRequestGlobals;
 	}
 	
 	@Override
-	public void renderPage(Writer writer, OfflinePageRenderParameters params) throws IOException {
+	public void renderPage(Writer writer, OfflineRequestContext context, PageRenderRequestParameters params) throws IOException {
 		PrintWriter printWriter = new PrintWriter(writer);
 		OfflineResponse response = new OfflineResponse(printWriter);
-		doRender(response, params.getSessionAttributes(), params.getLocale(), params.isSecure(), params.getPageRenderRequestParameters(), null);
+		doRender(response, context, params, null);
 		printWriter.flush();
 	}
 
 	@Override
-	public void renderPage(OutputStream out, OfflinePageRenderParameters params) throws IOException {
+	public void renderPage(OutputStream out, OfflineRequestContext context, PageRenderRequestParameters params) throws IOException {
 		OfflineResponse response = new OfflineResponse(out);
-		doRender(response, params.getSessionAttributes(), params.getLocale(), params.isSecure(), params.getPageRenderRequestParameters(), null);
+		doRender(response, context, params, null);
 		out.flush();
 	}
 	
 	@Override
-	public JSONObject renderComponent(OfflineComponentRenderParameters params) throws IOException {
+	public JSONObject renderComponent(OfflineRequestContext context, ComponentEventRequestParameters params) throws IOException {
 		StringWriter stringWriter = new StringWriter();
 		PrintWriter printWriter = new PrintWriter(stringWriter);
 		Response response = new OfflineResponse(printWriter);
-		doRender(response, params.getSessionAttributes(), params.getLocale(), params.isSecure(), null, params.getComponentEventRequestParameters());
+		doRender(response, context, null, params);
 		printWriter.flush();
 		return new JSONObject(stringWriter.toString());
 	}
 
 	protected void doRender(
 			final Response response, 
-			final Map<String, Object> sessionAttributes,
-			final Locale locale,
-			final boolean secure,
+			final OfflineRequestContext requestContext,
 			final PageRenderRequestParameters pageParams,
 			final ComponentEventRequestParameters componentParams) throws IOException {
 		
@@ -91,16 +87,9 @@ public class OfflineComponentRendererImpl implements OfflineComponentRenderer {
 		final Pointer<IOException> exception = new Pointer<IOException>();
 		Invokable<Void> invokable = new Invokable<Void>() {
 			public Void invoke() {
-				OfflineSession session = new OfflineSession();
-				if (sessionAttributes != null) {
-					for (Map.Entry<String, Object> entry : sessionAttributes.entrySet()) {
-						session.setAttribute(entry.getKey(), entry.getValue());
-					}
-				}
-				boolean xhr = doComponent;
-				OfflineRequest request = new OfflineRequest(session, contextPath, xhr, secure);
-				if (locale != null) {
-					threadLocale.setLocale(locale);
+				OfflineRequest request = new OfflineRequest(offlineRequestGlobals, requestContext);
+				if (requestContext.getLocale() != null) {
+					threadLocale.setLocale(requestContext.getLocale());
 				}
 				requestGlobals.storeRequestResponse(request, response);
 				try {
