@@ -12,5 +12,6 @@ import org.lazan.t5.offline.OfflineRequestContext;
 public interface OfflineComponentRenderer {
 	void renderPage(Writer writer, OfflineRequestContext context, PageRenderRequestParameters params) throws IOException;
 	void renderPage(OutputStream out, OfflineRequestContext context, PageRenderRequestParameters params) throws IOException;
+	void renderComponent(Writer writer, OfflineRequestContext context, ComponentEventRequestParameters params) throws IOException;
 	JSONObject renderComponent(OfflineRequestContext context, ComponentEventRequestParameters params) throws IOException;
 }

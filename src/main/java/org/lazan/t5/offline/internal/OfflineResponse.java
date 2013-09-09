@@ -6,17 +6,20 @@ import java.io.PrintWriter;
 
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.services.Response;
+import org.lazan.t5.offline.services.OfflineResponseGlobals;
 
 public class OfflineResponse implements Response {
 	private PrintWriter printWriter;
 	private OutputStream out;
+	private final OfflineResponseGlobals responseGlobals;
 	
-	public OfflineResponse(PrintWriter printWriter) {
+	public OfflineResponse(OfflineResponseGlobals offlineResponseGlobals, PrintWriter printWriter) {
+		this.responseGlobals = offlineResponseGlobals;
 		this.printWriter = printWriter;
 	}
 	
-	public OfflineResponse(OutputStream out) {
-		super();
+	public OfflineResponse(OfflineResponseGlobals offlineResponseGlobals, OutputStream out) {
+		this.responseGlobals = offlineResponseGlobals;
 		this.out = out;
 	}
 
@@ -74,12 +77,12 @@ public class OfflineResponse implements Response {
 
 	@Override
 	public String encodeURL(String URL) {
-		return URL; // TODO
+		return responseGlobals.encodeURL(URL);
 	}
 
 	@Override
 	public String encodeRedirectURL(String URL) {
-		throw new UnsupportedOperationException("encodeRedirectURL");
+		return responseGlobals.encodeRedirectURL(URL);
 	}
 
 	@Override

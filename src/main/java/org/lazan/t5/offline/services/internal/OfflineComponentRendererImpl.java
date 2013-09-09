@@ -24,6 +24,7 @@ import org.lazan.t5.offline.internal.OfflineResponse;
 import org.lazan.t5.offline.internal.Pointer;
 import org.lazan.t5.offline.services.OfflineComponentRenderer;
 import org.lazan.t5.offline.services.OfflineRequestGlobals;
+import org.lazan.t5.offline.services.OfflineResponseGlobals;
 
 public class OfflineComponentRendererImpl implements OfflineComponentRenderer {
 	private final ParallelExecutor parallelExecutor;
@@ -31,6 +32,7 @@ public class OfflineComponentRendererImpl implements OfflineComponentRenderer {
 	private final RequestGlobals requestGlobals;
 	private final ThreadLocale threadLocale;
 	private final OfflineRequestGlobals offlineRequestGlobals;
+	private final OfflineResponseGlobals offlineResponseGlobals;
 
 	public OfflineComponentRendererImpl(
 			ParallelExecutor parallelExecutor,
@@ -39,35 +41,45 @@ public class OfflineComponentRendererImpl implements OfflineComponentRenderer {
 			ApplicationGlobals applicationGlobals,
 			TypeCoercer typeCoercer,
 			ThreadLocale threadLocale,
-			OfflineRequestGlobals offlineRequestGlobals) {
+			OfflineRequestGlobals offlineRequestGlobals,
+			OfflineResponseGlobals offlineResponseGlobals) {
 		super();
 		this.parallelExecutor = parallelExecutor;
 		this.componentRequestHandler = componentRequestHandler;
 		this.requestGlobals = requestGlobals;
 		this.threadLocale = threadLocale;
 		this.offlineRequestGlobals = offlineRequestGlobals;
+		this.offlineResponseGlobals = offlineResponseGlobals;
 	}
 	
 	@Override
 	public void renderPage(Writer writer, OfflineRequestContext context, PageRenderRequestParameters params) throws IOException {
 		PrintWriter printWriter = new PrintWriter(writer);
-		OfflineResponse response = new OfflineResponse(printWriter);
+		OfflineResponse response = new OfflineResponse(offlineResponseGlobals, printWriter);
 		doRender(response, context, params, null);
 		printWriter.flush();
 	}
 
 	@Override
 	public void renderPage(OutputStream out, OfflineRequestContext context, PageRenderRequestParameters params) throws IOException {
-		OfflineResponse response = new OfflineResponse(out);
+		OfflineResponse response = new OfflineResponse(offlineResponseGlobals, out);
 		doRender(response, context, params, null);
 		out.flush();
 	}
 	
 	@Override
+	public void renderComponent(Writer writer, OfflineRequestContext context, ComponentEventRequestParameters params) throws IOException {
+		PrintWriter printWriter = new PrintWriter(writer);
+		Response response = new OfflineResponse(offlineResponseGlobals, printWriter);
+		doRender(response, context, null, params);
+		printWriter.flush();
+	}
+
+	@Override
 	public JSONObject renderComponent(OfflineRequestContext context, ComponentEventRequestParameters params) throws IOException {
 		StringWriter stringWriter = new StringWriter();
 		PrintWriter printWriter = new PrintWriter(stringWriter);
-		Response response = new OfflineResponse(printWriter);
+		Response response = new OfflineResponse(offlineResponseGlobals, printWriter);
 		doRender(response, context, null, params);
 		printWriter.flush();
 		return new JSONObject(stringWriter.toString());
