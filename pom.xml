@@ -4,9 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.lazan</groupId>
 	<artifactId>tapestry-offline</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<packaging>jar</packaging>
-	<name>Tapestry Offline Library</name>
+	<name>Tapestry Offline</name>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
