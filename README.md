@@ -16,7 +16,11 @@ public void renderPage(Writer writer) throws IOException {
     String logicalPageName = ...;
     EventContext activationContext = new ArrayEventContext(typeCoercer, ...);
     boolean loopback = false;
-    PageRenderRequestParameters params = new PageRenderRequestParameters(logicalPageName, activationContext, loopback);
+    PageRenderRequestParameters params = new PageRenderRequestParameters(
+        logicalPageName,
+        activationContext,
+        loopback
+    );
     
     // setup the RequestContext
     Map<String, Object> session = new HashMap<String, Object>();
@@ -45,7 +49,8 @@ public JSONObject renderComponent() throws IOException {
         nestedComponentId, 
         event,
         pageActivationContext, 
-        eventContext);
+        eventContext
+    );
 
     // setup the RequestContext
     Map<String, Object> session = new HashMap<String, Object>();
