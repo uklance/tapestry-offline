@@ -45,28 +45,33 @@ Pages and components can be rendered via the [OfflineComponentRenderer](https://
 @Inject TypeCoercer typeCoercer;
 
 public void renderPage(Writer writer) throws IOException {
+    // setup the PageRenderRequestParameters
     String logicalPageName = ...;
     EventContext activationContext = new ArrayEventContext(typeCoercer, ...);
     boolean loopback = false;
-    
     PageRenderRequestParameters params = new PageRenderRequestParameters(logicalPageName, activationContext, loopback);
     
+    // setup the RequestContext
     Map<String, Object> session = new HashMap<String, Object>();
     session.put("foo", "bar");
     DefaultOfflineRequestContext requestContext = new DefaultOfflineRequestContext();
     requestContext.setSession(session);
+    requestContext.setParameter("someParam", "paramValue");
+    requestContext.setAttribute("someAttribute", "attributeValue");
+    requestContext.setHeader("someHeader", "headerValue");
 
+    // render the page offline
     offlineRenderer.renderPage(writer, requestContext, params)
 }
 
 public JSONObject renderComponent() throws IOException {
+    // setup the ComponentEventRequestParameters
     String activePageName = ...;
     String containingPageName = ...;
     String nestedComponentId = ...;
     String event = ...;
     EventContext pageActivationContext = new ArrayEventContext(typeCoercer, ...);
     EventContext eventContext = new ArrayEventContext(typeCoercer, ...);
-
     ComponentEventRequestParameters eventParams = new ComponentEventRequestParameters(
         activePageName,
         containingPageName,
@@ -75,13 +80,17 @@ public JSONObject renderComponent() throws IOException {
         pageActivationContext, 
         eventContext);
 
+    // setup the RequestContext
     Map<String, Object> session = new HashMap<String, Object>();
     session.put("foo", "bar");
     DefaultOfflineRequestContext requestContext = new DefaultOfflineRequestContext();
     requestContext.setSession(session);
     requestContext.setXHR(true);
+    requestContext.setParameter("someParam", "paramValue");
+    requestContext.setAttribute("someAttribute", "attributeValue");
+    requestContext.setHeader("someHeader", "headerValue");
     
-    
+    // render the component offline
     return offlineRenderer.renderComponent(requestContext, eventParams);
 }
 ```
