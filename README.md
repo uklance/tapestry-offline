@@ -67,12 +67,6 @@ public JSONObject renderComponent() throws IOException {
     EventContext pageActivationContext = new ArrayEventContext(typeCoercer, ...);
     EventContext eventContext = new ArrayEventContext(typeCoercer, ...);
 
-    Map<String, Object> session = new HashMap<String, Object>();
-    session.put("foo", "bar");
-    DefaultOfflineRequestContext requestContext = new DefaultOfflineRequestContext();
-    requestContext.setSession(session);
-    requestContext.setXHR(true);
-    
     ComponentEventRequestParameters eventParams = new ComponentEventRequestParameters(
         activePageName,
         containingPageName,
@@ -80,6 +74,13 @@ public JSONObject renderComponent() throws IOException {
         event,
         pageActivationContext, 
         eventContext);
+
+    Map<String, Object> session = new HashMap<String, Object>();
+    session.put("foo", "bar");
+    DefaultOfflineRequestContext requestContext = new DefaultOfflineRequestContext();
+    requestContext.setSession(session);
+    requestContext.setXHR(true);
+    
     
     return offlineRenderer.renderComponent(requestContext, eventParams);
 }
