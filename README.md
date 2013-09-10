@@ -1,11 +1,12 @@
 tapestry-offline
 ================
 
-Offline rendering of tapestry pages and components without a HTTP servlet request
+Offline rendering of [Tapestry](http://tapestry.apache.org/) pages and components without a HTTP servlet request
 
 Usage
 -----
 Pages and components can be rendered via the [OfflineComponentRenderer](https://github.com/uklance/tapestry-offline/blob/master/src/main/java/org/lazan/t5/offline/services/OfflineComponentRenderer.java)
+which can be injected via [Tapestry IOC](http://tapestry.apache.org/ioc.html)
 ```java
 @Inject OfflineComponentRenderer offlineRenderer;
 @Inject TypeCoercer typeCoercer;
