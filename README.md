@@ -77,9 +77,17 @@ AppModule
 Configure the offline request symbols in your IOC Module
 ```java
 public static void contributeApplicationDefaults(MappedConfiguration<String, Object> config) {
+    // the host name of the server to which the request was sent. It is the value of the part before ":" in the
+    // Host header value, if any, or the resolved server name, or the server IP address.
     config.add("tapestry-offline.serverName", ...);
+
+    //  the fully qualified name of the client or the last proxy that sent the request
     config.add("tapestry-offline.remoteHost", ...);
+    
+    // the Internet Protocol (IP) port number of the interface on which the request was received.
     config.add("tapestry-offline.localPort", ...);
+    
+    // the port number to which the request was sent.
     config.add("tapestry-offline.serverPort", ...);
 }
 ```
