@@ -75,7 +75,6 @@ public class MyOfflineRenderer {
 AppModule
 ---------
 Configure the offline request symbols in your IOC Module
-
 ```java
 public static void contributeApplicationDefaults(MappedConfiguration<String, Object> config) {
     config.add("tapestry-offline.serverName", ...);
@@ -88,7 +87,6 @@ public static void contributeApplicationDefaults(MappedConfiguration<String, Obj
 Maven
 -----
 Add the following to your pom.xml:
-
 ```xml
 <dependencies>
     <dependency>
