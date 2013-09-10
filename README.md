@@ -16,8 +16,6 @@ Add the following to your pom.xml:
     </dependency>
 </dependencies>
 
-...
-
 <repositories>
     <repository>
         <id>lazan-releases</id>
@@ -32,10 +30,10 @@ Configure the offline request symbols in your IOC Module
 
 ```java
 public static void contributeApplicationDefaults(MappedConfiguration<String, Object> config) {
-    config.add("tapestry-offline.serverName", ?);
-    config.add("tapestry-offline.remoteHost", ?);
-    config.add("tapestry-offline.localPort", ?);
-    config.add("tapestry-offline.serverPort", ?);
+    config.add("tapestry-offline.serverName", ...);
+    config.add("tapestry-offline.remoteHost", ...);
+    config.add("tapestry-offline.localPort", ...);
+    config.add("tapestry-offline.serverPort", ...);
 }
 ```
 
