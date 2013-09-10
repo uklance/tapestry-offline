@@ -8,62 +8,67 @@ Usage
 Pages and components can be rendered via the [OfflineComponentRenderer](https://github.com/uklance/tapestry-offline/blob/master/src/main/java/org/lazan/t5/offline/services/OfflineComponentRenderer.java)
 which can be injected via [Tapestry IOC](http://tapestry.apache.org/ioc.html)
 ```java
-@Inject OfflineComponentRenderer offlineRenderer;
-@Inject TypeCoercer typeCoercer;
+public class MyOfflineRenderer {
+    @Inject
+    private OfflineComponentRenderer offlineRenderer;
 
-public void renderPage(Writer writer) throws IOException {
-    // setup the PageRenderRequestParameters
-    String logicalPageName = ...;
-    EventContext activationContext = new ArrayEventContext(typeCoercer, ...);
-    boolean loopback = false;
-    PageRenderRequestParameters params = new PageRenderRequestParameters(
-        logicalPageName,
-        activationContext,
-        loopback
-    );
+    @Inject
+    private TypeCoercer typeCoercer;
+
+    public void renderPage(Writer writer) throws IOException {
+        // setup the PageRenderRequestParameters
+        String logicalPageName = ...;
+        EventContext activationContext = new ArrayEventContext(typeCoercer, ...);
+        boolean loopback = false;
+        PageRenderRequestParameters params = new PageRenderRequestParameters(
+            logicalPageName,
+            activationContext,
+            loopback
+        );
     
-    // setup the RequestContext
-    Map<String, Object> session = new HashMap<String, Object>();
-    session.put("foo", "bar");
-    DefaultOfflineRequestContext requestContext = new DefaultOfflineRequestContext();
-    requestContext.setSession(session);
-    requestContext.setParameter("someParam", "paramValue");
-    requestContext.setAttribute("someAttribute", "attributeValue");
-    requestContext.setHeader("someHeader", "headerValue");
+        // setup the RequestContext
+        Map<String, Object> session = new HashMap<String, Object>();
+        session.put("foo", "bar");
+        DefaultOfflineRequestContext requestContext = new DefaultOfflineRequestContext();
+        requestContext.setSession(session);
+        requestContext.setParameter("someParam", "paramValue");
+        requestContext.setAttribute("someAttribute", "attributeValue");
+        requestContext.setHeader("someHeader", "headerValue");
 
-    // render the page offline
-    offlineRenderer.renderPage(writer, requestContext, params)
-}
+        // render the page offline
+        offlineRenderer.renderPage(writer, requestContext, params)
+    }
 
-public JSONObject renderComponent() throws IOException {
-    // setup the ComponentEventRequestParameters
-    String activePageName = ...;
-    String containingPageName = ...;
-    String nestedComponentId = ...;
-    String event = ...;
-    EventContext pageActivationContext = new ArrayEventContext(typeCoercer, ...);
-    EventContext eventContext = new ArrayEventContext(typeCoercer, ...);
-    ComponentEventRequestParameters eventParams = new ComponentEventRequestParameters(
-        activePageName,
-        containingPageName,
-        nestedComponentId, 
-        event,
-        pageActivationContext, 
-        eventContext
-    );
+    public JSONObject renderComponent() throws IOException {
+        // setup the ComponentEventRequestParameters
+        String activePageName = ...;
+        String containingPageName = ...;
+        String nestedComponentId = ...;
+        String event = ...;
+        EventContext pageActivationContext = new ArrayEventContext(typeCoercer, ...);
+        EventContext eventContext = new ArrayEventContext(typeCoercer, ...);
+        ComponentEventRequestParameters eventParams = new ComponentEventRequestParameters(
+            activePageName,
+            containingPageName,
+            nestedComponentId, 
+            event,
+            pageActivationContext, 
+            eventContext
+        );
 
-    // setup the RequestContext
-    Map<String, Object> session = new HashMap<String, Object>();
-    session.put("foo", "bar");
-    DefaultOfflineRequestContext requestContext = new DefaultOfflineRequestContext();
-    requestContext.setSession(session);
-    requestContext.setXHR(true);
-    requestContext.setParameter("someParam", "paramValue");
-    requestContext.setAttribute("someAttribute", "attributeValue");
-    requestContext.setHeader("someHeader", "headerValue");
+        // setup the RequestContext
+        Map<String, Object> session = new HashMap<String, Object>();
+        session.put("foo", "bar");
+        DefaultOfflineRequestContext requestContext = new DefaultOfflineRequestContext();
+        requestContext.setSession(session);
+        requestContext.setXHR(true);
+        requestContext.setParameter("someParam", "paramValue");
+        requestContext.setAttribute("someAttribute", "attributeValue");
+        requestContext.setHeader("someHeader", "headerValue");
     
-    // render the component offline
-    return offlineRenderer.renderComponent(requestContext, eventParams);
+        // render the component offline
+        return offlineRenderer.renderComponent(requestContext, eventParams);
+    }
 }
 ```
 
