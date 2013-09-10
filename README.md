@@ -39,7 +39,7 @@ public static void contributeApplicationDefaults(MappedConfiguration<String, Obj
 
 Usage
 -----
-
+Pages and components can be rendered via the [OfflineComponentRenderer](https://github.com/uklance/tapestry-offline/blob/master/src/main/java/org/lazan/t5/offline/services/OfflineComponentRenderer.java)
 ```java
 @Inject OfflineComponentRenderer offlineRenderer;
 @Inject TypeCoercer typeCoercer;
