@@ -15,7 +15,7 @@ public class MyOfflineRenderer {
     @Inject
     private TypeCoercer typeCoercer;
 
-    public void renderPage(Writer writer) throws IOException {
+    public String renderPageAsString() throws IOException {
         // setup the PageRenderRequestParameters
         String logicalPageName = ...;
         EventContext activationContext = new ArrayEventContext(typeCoercer, ...);
@@ -36,7 +36,9 @@ public class MyOfflineRenderer {
         requestContext.setHeader("someHeader", "headerValue");
 
         // render the page offline
+        StringWriter writer = new StringWriter();
         offlineRenderer.renderPage(writer, requestContext, params)
+        return writer.toString();
     }
 
     public JSONObject renderComponent() throws IOException {
