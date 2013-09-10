@@ -3,40 +3,6 @@ tapestry-offline
 
 Offline rendering of tapestry pages and components without a HTTP request
 
-Maven
------
-Add the following to your pom.xml:
-
-```xml
-<dependencies>
-    <dependency>
-        <groupId>org.lazan</groupId>
-        <artifactId>tapestry-offline</artifactId>
-        <version>x.y.z</version> <!-- lookup latest version at https://github.com/uklance/releases -->
-    </dependency>
-</dependencies>
-
-<repositories>
-    <repository>
-        <id>lazan-releases</id>
-        <url>https://github.com/uklance/releases/raw/master</url>
-    </repository>
-</repositories>
-```
-
-AppModule
----------
-Configure the offline request symbols in your IOC Module
-
-```java
-public static void contributeApplicationDefaults(MappedConfiguration<String, Object> config) {
-    config.add("tapestry-offline.serverName", ...);
-    config.add("tapestry-offline.remoteHost", ...);
-    config.add("tapestry-offline.localPort", ...);
-    config.add("tapestry-offline.serverPort", ...);
-}
-```
-
 Usage
 -----
 Pages and components can be rendered via the [OfflineComponentRenderer](https://github.com/uklance/tapestry-offline/blob/master/src/main/java/org/lazan/t5/offline/services/OfflineComponentRenderer.java)
@@ -94,3 +60,38 @@ public JSONObject renderComponent() throws IOException {
     return offlineRenderer.renderComponent(requestContext, eventParams);
 }
 ```
+
+AppModule
+---------
+Configure the offline request symbols in your IOC Module
+
+```java
+public static void contributeApplicationDefaults(MappedConfiguration<String, Object> config) {
+    config.add("tapestry-offline.serverName", ...);
+    config.add("tapestry-offline.remoteHost", ...);
+    config.add("tapestry-offline.localPort", ...);
+    config.add("tapestry-offline.serverPort", ...);
+}
+```
+
+Maven
+-----
+Add the following to your pom.xml:
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.lazan</groupId>
+        <artifactId>tapestry-offline</artifactId>
+        <version>x.y.z</version> <!-- lookup latest version at https://github.com/uklance/releases -->
+    </dependency>
+</dependencies>
+
+<repositories>
+    <repository>
+        <id>lazan-releases</id>
+        <url>https://github.com/uklance/releases/raw/master</url>
+    </repository>
+</repositories>
+```
+
