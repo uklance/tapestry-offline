@@ -68,7 +68,7 @@ public class MyOfflineRenderer {
         requestContext.setAttribute("someAttribute", "attributeValue");
         requestContext.setHeader("someHeader", "headerValue");
     
-        // render the component offline
+        // render the component event offline
         return offlineRenderer.renderComponent(requestContext, eventParams);
     }
 }
