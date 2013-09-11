@@ -42,7 +42,7 @@ public interface OfflineComponentRenderer {
 	 * Render a component event response as a {@link JSONObject}
 	 * @param context Offline request context (used to construct a {@link Request})
 	 * @param params Defines the component event and page activation context
-	 * @return a JSONObject component event response containing 'content' and 'scripts' etc.
+	 * @return a JSONObject component event response containing 'content', 'scripts' and 'inits' etc.
 	 */
 	JSONObject renderComponent(OfflineRequestContext context, ComponentEventRequestParameters params) throws IOException;
 }
