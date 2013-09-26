@@ -9,6 +9,7 @@ import org.apache.tapestry5.services.ComponentEventRequestParameters;
 import org.apache.tapestry5.services.PageRenderRequestParameters;
 import org.lazan.t5.offline.OfflineRequestContext;
 import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.Response;
 
 /**
  * Renders pages and components in situations that were not triggered by a HTTPServletRequest
@@ -16,7 +17,7 @@ import org.apache.tapestry5.services.Request;
 public interface OfflineComponentRenderer {
 	/**
 	 * Render a page response to a {@link Writer}
-	 * @param writer Writer
+	 * @param writer Writer used to construct a {@link Response} 
 	 * @param context Offline request context (used to construct a {@link Request})
 	 * @param params Defines the page and activation context
 	 */
@@ -24,7 +25,7 @@ public interface OfflineComponentRenderer {
 
 	/**
 	 * Render a binary page response to an {@link OutputStream}
-	 * @param out OutputStream
+	 * @param out OutputStream used to construct a {@link Response} 
 	 * @param context Offline request context (used to construct a {@link Request})
 	 * @param params Defines the page and activation context
 	 */
@@ -32,7 +33,7 @@ public interface OfflineComponentRenderer {
 
 	/**
 	 * Render a component event response to a {@link Writer}
-	 * @param writer Writer
+	 * @param writer Writer used to construct a {@link Response} 
 	 * @param context Offline request context (used to construct a {@link Request})
 	 * @param params Defines the component event and page activation context
 	 */
