@@ -120,9 +120,9 @@ Add the following to your pom.xml:
 How does it work?
 -----------------
 First, a [Request](http://tapestry.apache.org/current/apidocs/org/apache/tapestry5/services/Request.html) is constructed
-by combining [OfflineRequestContext](https://github.com/uklance/tapestry-offline/blob/master/src/main/java/org/lazan/t5/offline/OfflineRequestContext.java)
+by combining the [OfflineRequestContext](https://github.com/uklance/tapestry-offline/blob/master/src/main/java/org/lazan/t5/offline/OfflineRequestContext.java)
 parameter with the global [OfflineRequestGlobals](https://github.com/uklance/tapestry-offline/blob/master/src/main/java/org/lazan/t5/offline/services/OfflineRequestGlobals.java)
 service. Next, a [Response](http://tapestry.apache.org/current/apidocs/org/apache/tapestry5/services/Response.html)
-is created by Writer / OutputStream parameter with the global [OfflineResponseGlobals](https://github.com/uklance/tapestry-offline/blob/master/src/main/java/org/lazan/t5/offline/services/OfflineResponseGlobals.java]
+is created by combining the Writer / OutputStream parameter with the global [OfflineResponseGlobals](https://github.com/uklance/tapestry-offline/blob/master/src/main/java/org/lazan/t5/offline/services/OfflineResponseGlobals.java)
 service. The core tapestry page / component rendering pipeline is then invoked on a seperate thread to prevent dirtying
 the current thread.
