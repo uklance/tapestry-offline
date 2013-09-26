@@ -41,7 +41,7 @@ public class MyOfflineRenderer {
         return writer.toString();
     }
 
-    public JSONObject renderComponent() throws IOException {
+    public JSONObject renderComponentAsJSONObject() throws IOException {
         // setup the ComponentEventRequestParameters
         String activePageName = ...;
         String containingPageName = ...;
