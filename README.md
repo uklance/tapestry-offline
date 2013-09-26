@@ -3,6 +3,16 @@ tapestry-offline
 
 Offline rendering of [Tapestry](http://tapestry.apache.org/) pages and components without a HTTP servlet request
 
+How does it work?
+-----------------
+A [Request](http://tapestry.apache.org/current/apidocs/org/apache/tapestry5/services/Request.html) is created 
+by combining the local [OfflineRequestContext](https://github.com/uklance/tapestry-offline/blob/master/src/main/java/org/lazan/t5/offline/OfflineRequestContext.java)
+with the global [OfflineRequestGlobals](https://github.com/uklance/tapestry-offline/blob/master/src/main/java/org/lazan/t5/offline/services/OfflineRequestGlobals.java]
+and a [Response](http://tapestry.apache.org/current/apidocs/org/apache/tapestry5/services/Response.html) is created by
+combining the local Writer / OutputStream with [OfflineResponseGlobals](https://github.com/uklance/tapestry-offline/blob/master/src/main/java/org/lazan/t5/offline/services/OfflineResponseGlobals.java].
+The core tapestry page / component rendering pipeline is then invoked on a seperate thread to prevent dirtying the current
+thread.
+
 Usage
 -----
 Pages and components can be rendered via the [OfflineComponentRenderer](https://github.com/uklance/tapestry-offline/blob/master/src/main/java/org/lazan/t5/offline/services/OfflineComponentRenderer.java)
