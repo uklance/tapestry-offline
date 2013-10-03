@@ -3,8 +3,8 @@ tapestry-offline
 
 Offline rendering of [Tapestry](http://tapestry.apache.org/) pages and components without a HTTP servlet request
 
-Usage
------
+## Usage
+
 Pages and components can be rendered via the [OfflineComponentRenderer](https://github.com/uklance/tapestry-offline/blob/master/src/main/java/org/lazan/t5/offline/services/OfflineComponentRenderer.java)
 which can be injected via [Tapestry IOC](http://tapestry.apache.org/ioc.html)
 ```java
@@ -74,8 +74,10 @@ public class MyOfflineRenderer {
 }
 ```
 
-AppModule
----------
+## Configuration
+
+### AppModule
+
 Configure the offline request symbols in your IOC Module
 ```java
 /**
@@ -97,7 +99,11 @@ public static void contributeApplicationDefaults(MappedConfiguration<String, Obj
 }
 ```
 
-Maven
+### ParallelExecutor
+
+Configuration options listed [here](http://tapestry.apache.org/parallel-execution.html#ParallelExecution-Configuration)
+
+### Maven
 -----
 Add the following to your pom.xml:
 ```xml
@@ -117,8 +123,8 @@ Add the following to your pom.xml:
 </repositories>
 ```
 
-How does it work?
------------------
+## How does it work?
+
 First, a [Request](http://tapestry.apache.org/current/apidocs/org/apache/tapestry5/services/Request.html) is constructed
 by combining the [OfflineRequestContext](https://github.com/uklance/tapestry-offline/blob/master/src/main/java/org/lazan/t5/offline/OfflineRequestContext.java)
 parameter with the global [OfflineRequestGlobals](https://github.com/uklance/tapestry-offline/blob/master/src/main/java/org/lazan/t5/offline/services/OfflineRequestGlobals.java)
