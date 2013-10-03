@@ -104,7 +104,7 @@ public static void contributeApplicationDefaults(MappedConfiguration<String, Obj
 Configuration options listed [here](http://tapestry.apache.org/parallel-execution.html#ParallelExecution-Configuration)
 
 ### Maven
------
+
 Add the following to your pom.xml:
 ```xml
 <dependencies>
