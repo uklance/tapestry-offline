@@ -84,8 +84,9 @@ Configure the offline request symbols in your IOC Module
  * These are usually only required if generating links when rendering pages / components offline
  */
 public static void contributeApplicationDefaults(MappedConfiguration<String, Object> config) {
-    // the host name of the server to which the request was sent. It is the value of the part before ":" in the
-    // Host header value, if any, or the resolved server name, or the server IP address.
+    // the host name of the server to which the request was sent. It is the value of the part
+    // before ":" in the Host header value, if any, or the resolved server name, or the 
+    // server IP address.
     config.add("tapestry-offline.serverName", ...);
 
     //  the fully qualified name of the client or the last proxy that sent the request
