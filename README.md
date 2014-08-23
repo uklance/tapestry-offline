@@ -119,7 +119,7 @@ Add the following to your pom.xml:
 <repositories>
     <repository>
         <id>lazan-releases</id>
-        <url>https://github.com/uklance/releases/raw/master</url>
+        <url>https://raw.github.com/uklance/releases/master</url>
     </repository>
 </repositories>
 ```
