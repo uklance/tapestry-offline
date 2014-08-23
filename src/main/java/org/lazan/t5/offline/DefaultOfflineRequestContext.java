@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.services.Session;
 import org.lazan.t5.offline.internal.OfflineSession;
@@ -18,6 +20,8 @@ public class DefaultOfflineRequestContext implements OfflineRequestContext {
 	private Map<String, Object> attributes;
 	private boolean requestedSessionIdValid;
 	private Map<String, String> headers;
+	private Cookie[] cookies;
+	private String method;
 
 	@Override
 	public Session getSession(boolean create) {
@@ -152,9 +156,22 @@ public class DefaultOfflineRequestContext implements OfflineRequestContext {
 	public String getHeader(String name) {
 		return headers == null ? null : headers.get(name);
 	}
+	
+	public void setMethod(String method) {
+		this.method = method;
+	}
 
 	@Override
 	public String getMethod() {
-		throw new UnsupportedOperationException("getMethod");
+		return method;
+	}
+	
+	public void setCookies(Cookie[] cookies) {
+		this.cookies = cookies;
+	}
+	
+	@Override
+	public Cookie[] getCookies() {
+		return cookies;
 	}
 }

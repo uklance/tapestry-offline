@@ -2,14 +2,16 @@ package org.lazan.t5.offline.services;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.Writer;
+import java.util.concurrent.Future;
 
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.ComponentEventRequestParameters;
 import org.apache.tapestry5.services.PageRenderRequestParameters;
-import org.lazan.t5.offline.OfflineRequestContext;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.Response;
+import org.lazan.t5.offline.OfflineRequestContext;
 
 /**
  * Renders pages and components in situations that were not triggered by a HTTPServletRequest
@@ -21,7 +23,7 @@ public interface OfflineComponentRenderer {
 	 * @param context Offline request context (used to construct a {@link Request})
 	 * @param params Defines the page and activation context
 	 */
-	void renderPage(Writer writer, OfflineRequestContext context, PageRenderRequestParameters params) throws IOException;
+	Future<?> renderPage(PrintWriter writer, OfflineRequestContext context, PageRenderRequestParameters params) throws IOException;
 
 	/**
 	 * Render a binary page response to an {@link OutputStream}
@@ -29,7 +31,7 @@ public interface OfflineComponentRenderer {
 	 * @param context Offline request context (used to construct a {@link Request})
 	 * @param params Defines the page and activation context
 	 */
-	void renderPage(OutputStream out, OfflineRequestContext context, PageRenderRequestParameters params) throws IOException;
+	Future<?> renderPage(OutputStream out, OfflineRequestContext context, PageRenderRequestParameters params) throws IOException;
 
 	/**
 	 * Render a component event response to a {@link Writer}
@@ -37,7 +39,7 @@ public interface OfflineComponentRenderer {
 	 * @param context Offline request context (used to construct a {@link Request})
 	 * @param params Defines the component event and page activation context
 	 */
-	void renderComponent(Writer writer, OfflineRequestContext context, ComponentEventRequestParameters params) throws IOException;
+	Future<?> renderComponentEvent(PrintWriter writer, OfflineRequestContext context, ComponentEventRequestParameters params) throws IOException;
 
 	/**
 	 * Render a component event response as a {@link JSONObject}
@@ -45,5 +47,5 @@ public interface OfflineComponentRenderer {
 	 * @param params Defines the component event and page activation context
 	 * @return a JSONObject component event response containing 'content', 'scripts' and 'inits' etc.
 	 */
-	JSONObject renderComponent(OfflineRequestContext context, ComponentEventRequestParameters params) throws IOException;
+	Future<JSONObject> renderComponentEvent(OfflineRequestContext context, ComponentEventRequestParameters params) throws IOException;
 }

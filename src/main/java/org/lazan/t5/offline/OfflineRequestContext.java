@@ -3,6 +3,8 @@ package org.lazan.t5.offline;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.http.Cookie;
+
 import org.apache.tapestry5.services.Session;
 
 public interface OfflineRequestContext {
@@ -35,4 +37,6 @@ public interface OfflineRequestContext {
 	public void setAttribute(String name, Object value);
 
 	public String getMethod();
+	
+	public Cookie[] getCookies();
 }
