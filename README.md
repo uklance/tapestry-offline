@@ -71,7 +71,7 @@ public class MyOfflineRenderer {
         requestContext.setHeader("someHeader", "headerValue");
     
         // render the component event offline
-        Future<JSONObject> future = return offlineRenderer.renderComponent(requestContext, eventParams);
+        Future<JSONObject> future = offlineRenderer.renderComponent(requestContext, eventParams);
         return future.get();
     }
 }
