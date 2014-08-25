@@ -15,7 +15,7 @@ public class MyOfflineRenderer {
     @Inject
     private TypeCoercer typeCoercer;
 
-    public String renderPageAsString() throws IOException {
+    public String renderPageAsString() throws Exception {
         // setup the PageRenderRequestParameters
         String logicalPageName = ...;
         EventContext activationContext = new ArrayEventContext(typeCoercer, ...);
@@ -37,11 +37,12 @@ public class MyOfflineRenderer {
 
         // render the page offline
         StringWriter writer = new StringWriter();
-        offlineRenderer.renderPage(writer, requestContext, params)
+        Furute<?> future = offlineRenderer.renderPage(writer, requestContext, params);
+        future.get();
         return writer.toString();
     }
 
-    public JSONObject renderComponentAsJSONObject() throws IOException {
+    public JSONObject renderComponentAsJSONObject() throws Exception {
         // setup the ComponentEventRequestParameters
         String activePageName = ...;
         String containingPageName = ...;
@@ -69,7 +70,8 @@ public class MyOfflineRenderer {
         requestContext.setHeader("someHeader", "headerValue");
     
         // render the component event offline
-        return offlineRenderer.renderComponent(requestContext, eventParams);
+        Future<JSONObject> future = return offlineRenderer.renderComponent(requestContext, eventParams);
+        return future.get();
     }
 }
 ```
