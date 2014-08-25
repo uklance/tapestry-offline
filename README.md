@@ -38,7 +38,7 @@ public class MyOfflineRenderer {
         // render the page offline
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
-        Future<?> future = offlineRenderer.renderPage(printWriter, requestContext, params);
+        Future<?> future = offlineRenderer.renderPage(requestContext, params, printWriter);
         future.get();
         return stringWriter.toString();
     }
