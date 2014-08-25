@@ -23,7 +23,7 @@ public class TapestryOfflineModule {
 		return new CookieSource() {
 			@Override
 			public Cookie[] getCookies() {
-				return offlineCookieGlobals.isCookiesSet() ? offlineCookieGlobals.getCookies() : decorateMe.getCookies();
+				return offlineCookieGlobals.isCookiesStored() ? offlineCookieGlobals.getCookies() : decorateMe.getCookies();
 			}
 		};
 	}

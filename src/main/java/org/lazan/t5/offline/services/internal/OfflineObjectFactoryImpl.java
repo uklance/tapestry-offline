@@ -29,12 +29,12 @@ public class OfflineObjectFactoryImpl implements OfflineObjectFactory {
 	}
 
 	@Override
-	public Response createResponse(PrintWriter writer, OfflineRequestContext context) {
+	public Response createResponse(OfflineRequestContext context, PrintWriter writer) {
 		return new OfflineResponse(offlineResponseGlobals, writer);
 	}
 	
 	@Override
-	public Response createResponse(OutputStream out, OfflineRequestContext requestContext) {
+	public Response createResponse(OfflineRequestContext requestContext, OutputStream out) {
 		return new OfflineResponse(offlineResponseGlobals, out);
 	}
 }

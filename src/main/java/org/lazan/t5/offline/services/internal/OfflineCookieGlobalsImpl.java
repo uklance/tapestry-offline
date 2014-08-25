@@ -9,12 +9,12 @@ import org.lazan.t5.offline.services.OfflineCookieGlobals;
 @Scope(ScopeConstants.PERTHREAD)
 public class OfflineCookieGlobalsImpl implements OfflineCookieGlobals {
 	private Cookie[] cookies;
-	private boolean cookiesSet;
+	private boolean cookiesStored;
 
 	@Override
-	public void setCookies(Cookie[] cookies) {
+	public void storeCookies(Cookie[] cookies) {
 		this.cookies = cookies;
-		this.cookiesSet = true;
+		this.cookiesStored = true;
 	}
 
 	@Override
@@ -23,7 +23,7 @@ public class OfflineCookieGlobalsImpl implements OfflineCookieGlobals {
 	}
 	
 	@Override
-	public boolean isCookiesSet() {
-		return cookiesSet;
+	public boolean isCookiesStored() {
+		return cookiesStored;
 	}
 }

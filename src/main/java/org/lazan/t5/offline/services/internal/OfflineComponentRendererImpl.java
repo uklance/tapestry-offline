@@ -54,28 +54,34 @@ public class OfflineComponentRendererImpl implements OfflineComponentRenderer {
 	}
 	
 	@Override
-	public Future<?> renderPage(PrintWriter writer, OfflineRequestContext context, PageRenderRequestParameters params) throws IOException {
-		Response response = offlineObjectFactory.createResponse(writer, context);
+	public Future<?> renderPage(OfflineRequestContext context, PageRenderRequestParameters params, PrintWriter writer) {
+		Response response = offlineObjectFactory.createResponse(context, writer);
 		return doRender(response, context, params, null, writer);
 	}
 
 	@Override
-	public Future<?> renderPage(OutputStream out, OfflineRequestContext context, PageRenderRequestParameters params) throws IOException {
-		Response response = offlineObjectFactory.createResponse(out, context);
+	public Future<?> renderPage(OfflineRequestContext context, PageRenderRequestParameters params, OutputStream out) {
+		Response response = offlineObjectFactory.createResponse(context, out);
 		return doRender(response, context, params, null, out);
 	}
 	
 	@Override
-	public Future<?> renderComponentEvent(PrintWriter writer, OfflineRequestContext context, ComponentEventRequestParameters params) throws IOException {
-		Response response = offlineObjectFactory.createResponse(writer, context);
+	public Future<?> renderComponentEvent(OfflineRequestContext context, ComponentEventRequestParameters params, PrintWriter writer) {
+		Response response = offlineObjectFactory.createResponse(context, writer);
 		return doRender(response, context, null, params, writer);
 	}
 
 	@Override
-	public Future<JSONObject> renderComponentEvent(OfflineRequestContext context, ComponentEventRequestParameters params) throws IOException {
+	public Future<?> renderComponentEvent(OfflineRequestContext context, ComponentEventRequestParameters params, OutputStream out) {
+		Response response = offlineObjectFactory.createResponse(context, out);
+		return doRender(response, context, null, params, out);
+	}
+	
+	@Override
+	public Future<JSONObject> renderComponentEvent(OfflineRequestContext context, ComponentEventRequestParameters params) {
 		final StringWriter stringWriter = new StringWriter();
 		PrintWriter printWriter = new PrintWriter(stringWriter);
-		final Future<?> future = renderComponentEvent(printWriter, context, params);
+		final Future<?> future = renderComponentEvent(context, params, printWriter);
 		return new Future<JSONObject>() {
 			public boolean cancel(boolean mayInterruptWhileRunning) {
 				return future.cancel(mayInterruptWhileRunning);
@@ -97,12 +103,16 @@ public class OfflineComponentRendererImpl implements OfflineComponentRenderer {
 		};
 	}
 
+	/**
+	 * Render the content using the {@link ParallelExecutor} to avoid dirtying the current thread.
+	 * @return A Future to the rendering operation
+	 */
 	protected Future<?> doRender(
 			final Response response, 
 			final OfflineRequestContext requestContext,
 			final PageRenderRequestParameters pageParams,
 			final ComponentEventRequestParameters componentParams,
-			final Flushable flushable) throws IOException {
+			final Flushable flushable) {
 		
 		final boolean doPage = pageParams != null;
 		final boolean doComponent = componentParams != null;
@@ -117,7 +127,7 @@ public class OfflineComponentRendererImpl implements OfflineComponentRenderer {
 					if (requestContext.getLocale() != null) {
 						threadLocale.setLocale(requestContext.getLocale());
 					}
-					offlineCookieGlobals.setCookies(requestContext.getCookies());
+					offlineCookieGlobals.storeCookies(requestContext.getCookies());
 					requestGlobals.storeRequestResponse(request, response);
 					if (doPage) {
 						componentRequestHandler.handlePageRender(pageParams);

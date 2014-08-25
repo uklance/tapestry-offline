@@ -1,9 +1,7 @@
 package org.lazan.t5.offline.services;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.util.concurrent.Future;
 
 import org.apache.tapestry5.json.JSONObject;
@@ -18,34 +16,47 @@ import org.lazan.t5.offline.OfflineRequestContext;
  */
 public interface OfflineComponentRenderer {
 	/**
-	 * Render a page response to a {@link Writer}
-	 * @param writer Writer used to construct a {@link Response} 
+	 * Render a page response to a {@link PrintWriter}
 	 * @param context Offline request context (used to construct a {@link Request})
 	 * @param params Defines the page and activation context
+	 * @param writer Writer used to construct a {@link Response} 
+	 * @return A {@link Future} to the rendering operation. Call {@link Future.get()} before attempting to access the rendered content.
 	 */
-	Future<?> renderPage(PrintWriter writer, OfflineRequestContext context, PageRenderRequestParameters params) throws IOException;
+	Future<?> renderPage(OfflineRequestContext context, PageRenderRequestParameters params, PrintWriter writer);
 
 	/**
 	 * Render a binary page response to an {@link OutputStream}
-	 * @param out OutputStream used to construct a {@link Response} 
 	 * @param context Offline request context (used to construct a {@link Request})
 	 * @param params Defines the page and activation context
+	 * @param out OutputStream used to construct a {@link Response} 
+	 * @return A {@link Future} to the rendering operation. Call {@link Future.get()} before attempting to access the rendered content.
 	 */
-	Future<?> renderPage(OutputStream out, OfflineRequestContext context, PageRenderRequestParameters params) throws IOException;
+	Future<?> renderPage(OfflineRequestContext context, PageRenderRequestParameters params, OutputStream out);
 
 	/**
-	 * Render a component event response to a {@link Writer}
-	 * @param writer Writer used to construct a {@link Response} 
+	 * Render a component event response to a {@link PrintWriter}
 	 * @param context Offline request context (used to construct a {@link Request})
 	 * @param params Defines the component event and page activation context
+	 * @param writer Writer used to construct a {@link Response} 
+	 * @return A {@link Future} to the rendering operation. Call {@link Future.get()} before attempting to access the rendered content.
 	 */
-	Future<?> renderComponentEvent(PrintWriter writer, OfflineRequestContext context, ComponentEventRequestParameters params) throws IOException;
+	Future<?> renderComponentEvent(OfflineRequestContext context, ComponentEventRequestParameters params, PrintWriter writer);
 
+	/**
+	 * Render a binary event response to an {@link OutputStream}
+	 * @param context Offline request context (used to construct a {@link Request})
+	 * @param params Defines the component event and page activation context
+	 * @param writer Writer used to construct a {@link Response} 
+	 * @return A {@link Future} to the rendering operation. Call {@link Future.get()} before attempting to access the rendered content.
+	 */
+	Future<?> renderComponentEvent(OfflineRequestContext context, ComponentEventRequestParameters params, OutputStream out);
+	
 	/**
 	 * Render a component event response as a {@link JSONObject}
 	 * @param context Offline request context (used to construct a {@link Request})
 	 * @param params Defines the component event and page activation context
 	 * @return a JSONObject component event response containing 'content', 'scripts' and 'inits' etc.
+	 * @return A {@link Future} to the rendering operation. Call {@link Future.get()} to obtain the JSONObject.
 	 */
-	Future<JSONObject> renderComponentEvent(OfflineRequestContext context, ComponentEventRequestParameters params) throws IOException;
+	Future<JSONObject> renderComponentEvent(OfflineRequestContext context, ComponentEventRequestParameters params);
 }
