@@ -36,10 +36,11 @@ public class MyOfflineRenderer {
         requestContext.setHeader("someHeader", "headerValue");
 
         // render the page offline
-        StringWriter writer = new StringWriter();
-        Future<?> future = offlineRenderer.renderPage(writer, requestContext, params);
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(stringWriter);
+        Future<?> future = offlineRenderer.renderPage(printWriter, requestContext, params);
         future.get();
-        return writer.toString();
+        return stringWriter.toString();
     }
 
     public JSONObject renderComponentAsJSONObject() throws Exception {
