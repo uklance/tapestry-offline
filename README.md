@@ -1,4 +1,4 @@
-tapestry-offline
+tapestry-offline [![Build Status](https://travis-ci.org/uklance/tapestry-offline.svg?branch=master)](https://travis-ci.org/uklance/tapestry-offline) [![Coverage Status](https://coveralls.io/repos/uklance/tapestry-offline/badge.svg?branch=master)](https://coveralls.io/r/uklance/tapestry-offline?branch=master)
 ================
 
 Offline rendering of [Tapestry](http://tapestry.apache.org/) pages and components without a HTTP servlet request
