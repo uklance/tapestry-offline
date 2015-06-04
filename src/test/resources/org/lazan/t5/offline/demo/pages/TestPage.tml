@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+	<body>
+		Page counting to ${pageContext} (<t:loop source="pageItems" value="currentValue">${currentValue} </t:loop>)
+		<t:block t:id="testBlock">
+			Event counting to ${eventContext} (<t:loop source="eventItems" value="currentValue">${currentValue} </t:loop>)
+		</t:block>
+	</body>
+</html>
