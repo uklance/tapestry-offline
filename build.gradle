@@ -17,10 +17,11 @@ repositories {
 }
 
 dependencies {
-    compile group: 'org.apache.tapestry', name: 'tapestry-core', version:'5.4.1'
-    compileOnly group: 'javax.servlet', name: 'servlet-api', version:'2.5'
-    testCompile group: 'junit', name: 'junit', version:'4.4'
-    testCompile group: 'org.eclipse.jetty', name: 'jetty-webapp', version:'7.6.17.v20150415'
+    compile 'org.apache.tapestry:tapestry-core:5.4.1'
+    compileOnly 'javax.servlet:servlet-api:2.5'
+    testCompile 'junit:junit:4.4'
+    testCompile 'org.eclipse.jetty:jetty-webapp:7.6.17.v20150415'
+	testCompile 'org.mockito:mockito-all:1.10.19'
 }
 
 jacocoTestReport {
