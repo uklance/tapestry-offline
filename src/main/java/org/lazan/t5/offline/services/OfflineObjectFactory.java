@@ -3,14 +3,9 @@ package org.lazan.t5.offline.services;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
-import org.apache.tapestry5.services.Request;
-import org.apache.tapestry5.services.Response;
-import org.lazan.t5.offline.OfflineRequestContext;
+import javax.servlet.http.HttpServletRequest;
 
 public interface OfflineObjectFactory {
-	Request createRequest(OfflineRequestContext requestContext);
-	
-	Response createResponse(OfflineRequestContext requestContext, PrintWriter writer);
-
-	Response createResponse(OfflineRequestContext requestContext, OutputStream out);
+	OfflineObjects createOfflineObjects(HttpServletRequest httpRequest, PrintWriter writer);
+	OfflineObjects createOfflineObjects(HttpServletRequest httpRequest, OutputStream out);
 }

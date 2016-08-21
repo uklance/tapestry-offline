@@ -10,6 +10,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.tapestry5.ioc.Invokable;
 import org.apache.tapestry5.ioc.services.ParallelExecutor;
 import org.apache.tapestry5.ioc.services.ThreadLocale;
@@ -22,10 +24,9 @@ import org.apache.tapestry5.services.PageRenderRequestParameters;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestGlobals;
 import org.apache.tapestry5.services.Response;
-import org.lazan.t5.offline.OfflineRequestContext;
 import org.lazan.t5.offline.services.OfflineComponentRenderer;
-import org.lazan.t5.offline.services.OfflineCookieGlobals;
 import org.lazan.t5.offline.services.OfflineObjectFactory;
+import org.lazan.t5.offline.services.OfflineObjects;
 
 public class OfflineComponentRendererImpl implements OfflineComponentRenderer {
 	private final ParallelExecutor parallelExecutor;
@@ -33,7 +34,6 @@ public class OfflineComponentRendererImpl implements OfflineComponentRenderer {
 	private final RequestGlobals requestGlobals;
 	private final ThreadLocale threadLocale;
 	private final OfflineObjectFactory offlineObjectFactory;
-	private final OfflineCookieGlobals offlineCookieGlobals;
 
 	public OfflineComponentRendererImpl(
 			ParallelExecutor parallelExecutor,
@@ -42,46 +42,44 @@ public class OfflineComponentRendererImpl implements OfflineComponentRenderer {
 			ApplicationGlobals applicationGlobals,
 			TypeCoercer typeCoercer,
 			ThreadLocale threadLocale,
-			OfflineObjectFactory offlineObjectFactory,
-			OfflineCookieGlobals offlineCookieGlobals) {
+			OfflineObjectFactory offlineObjectFactory) {
 		super();
 		this.parallelExecutor = parallelExecutor;
 		this.componentRequestHandler = componentRequestHandler;
 		this.requestGlobals = requestGlobals;
 		this.threadLocale = threadLocale;
 		this.offlineObjectFactory = offlineObjectFactory;
-		this.offlineCookieGlobals = offlineCookieGlobals;
 	}
 	
 	@Override
-	public Future<?> renderPage(OfflineRequestContext context, PageRenderRequestParameters params, PrintWriter writer) {
-		Response response = offlineObjectFactory.createResponse(context, writer);
-		return doRender(response, context, params, null, writer);
+	public Future<?> renderPage(HttpServletRequest httpRequest, PageRenderRequestParameters params, PrintWriter writer) {
+		OfflineObjects offlineObjects = offlineObjectFactory.createOfflineObjects(httpRequest, writer);
+		return doRender(httpRequest, offlineObjects, params, null, writer);
 	}
 
 	@Override
-	public Future<?> renderPage(OfflineRequestContext context, PageRenderRequestParameters params, OutputStream out) {
-		Response response = offlineObjectFactory.createResponse(context, out);
-		return doRender(response, context, params, null, out);
+	public Future<?> renderPage(HttpServletRequest httpRequest, PageRenderRequestParameters params, OutputStream out) {
+		OfflineObjects offlineObjects = offlineObjectFactory.createOfflineObjects(httpRequest, out);
+		return doRender(httpRequest, offlineObjects, params, null, out);
 	}
 	
 	@Override
-	public Future<?> renderComponentEvent(OfflineRequestContext context, ComponentEventRequestParameters params, PrintWriter writer) {
-		Response response = offlineObjectFactory.createResponse(context, writer);
-		return doRender(response, context, null, params, writer);
+	public Future<?> renderComponentEvent(HttpServletRequest httpRequest, ComponentEventRequestParameters params, PrintWriter writer) {
+		OfflineObjects offlineObjects = offlineObjectFactory.createOfflineObjects(httpRequest, writer);
+		return doRender(httpRequest, offlineObjects, null, params, writer);
 	}
 
 	@Override
-	public Future<?> renderComponentEvent(OfflineRequestContext context, ComponentEventRequestParameters params, OutputStream out) {
-		Response response = offlineObjectFactory.createResponse(context, out);
-		return doRender(response, context, null, params, out);
+	public Future<?> renderComponentEvent(HttpServletRequest httpRequest, ComponentEventRequestParameters params, OutputStream out) {
+		OfflineObjects offlineObjects = offlineObjectFactory.createOfflineObjects(httpRequest, out);
+		return doRender(httpRequest, offlineObjects, null, params, out);
 	}
 	
 	@Override
-	public Future<JSONObject> renderComponentEvent(OfflineRequestContext context, ComponentEventRequestParameters params) {
+	public Future<JSONObject> renderComponentEvent(HttpServletRequest httpRequest, ComponentEventRequestParameters params) {
 		final StringWriter stringWriter = new StringWriter();
 		PrintWriter printWriter = new PrintWriter(stringWriter);
-		final Future<?> future = renderComponentEvent(context, params, printWriter);
+		final Future<?> future = renderComponentEvent(httpRequest, params, printWriter);
 		return new Future<JSONObject>() {
 			public boolean cancel(boolean mayInterruptWhileRunning) {
 				return future.cancel(mayInterruptWhileRunning);
@@ -108,8 +106,8 @@ public class OfflineComponentRendererImpl implements OfflineComponentRenderer {
 	 * @return A Future to the rendering operation
 	 */
 	protected Future<?> doRender(
-			final Response response, 
-			final OfflineRequestContext requestContext,
+			final HttpServletRequest httpRequest, 
+			final OfflineObjects offlineObjects, 
 			final PageRenderRequestParameters pageParams,
 			final ComponentEventRequestParameters componentParams,
 			final Flushable flushable) {
@@ -123,11 +121,12 @@ public class OfflineComponentRendererImpl implements OfflineComponentRenderer {
 		Invokable<?> invokable = new Invokable<Object>() {
 			public Object invoke() {
 				try {
-					Request request = offlineObjectFactory.createRequest(requestContext);
-					if (requestContext.getLocale() != null) {
-						threadLocale.setLocale(requestContext.getLocale());
+					Request request = offlineObjects.getRequest();
+					Response response = offlineObjects.getResponse();
+					if (request.getLocale() != null) {
+						threadLocale.setLocale(request.getLocale());
 					}
-					offlineCookieGlobals.storeCookies(requestContext.getCookies());
+					requestGlobals.storeServletRequestResponse(httpRequest, offlineObjects.getHttpServletResponse());
 					requestGlobals.storeRequestResponse(request, response);
 					if (doPage) {
 						componentRequestHandler.handlePageRender(pageParams);
